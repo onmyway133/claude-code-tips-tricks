@@ -15,6 +15,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 6: Turn a recurring task into a loop or a scheduled job](#tip-6-turn-a-recurring-task-into-a-loop-or-a-scheduled-job)
 - [Tip 7: Understand what auto mode is actually deciding for you](#tip-7-understand-what-auto-mode-is-actually-deciding-for-you)
 - [Tip 8: Track your token spend with ccusage](#tip-8-track-your-token-spend-with-ccusage)
+- [Tip 9: Organize multiple projects with a terminal multiplexer app](#tip-9-organize-multiple-projects-with-a-terminal-multiplexer-app)
 
 ### Command
 - [Tip 1: Give Claude a standing goal for the whole session](#tip-1-give-claude-a-standing-goal-for-the-whole-session)
@@ -162,6 +163,17 @@ npx ccusage@latest blocks --live
 ```
 
 Reference: [ccusage](https://github.com/ccusage/ccusage)
+
+### Tip 9: Organize multiple projects with a terminal multiplexer app
+
+Running several Claude Code sessions across different projects gets messy fast when they're all just tabs in one terminal window. [Muxy](https://muxy.app/) is a native Mac terminal built on Ghostty that groups terminals by project instead of by raw session, so each codebase gets its own space with its own tabs, split panes, and git worktrees. Its iOS and Android companion apps let you check on or drive a running session from your phone, similar to Claude's own remote control feature but at the multiplexer level instead of the session level. Muxy also ships an Agent Skill (`muxy-cli`) that lets Claude open projects, create splits, send keystrokes, and read pane output on its own, so a session can manage its own workspace layout instead of just running inside it.
+
+Example:
+```
+npx skills add github.com/muxy-app/muxy/tree/main/Muxy/Resources/skills/muxy-cli
+```
+
+Reference: [Muxy](https://muxy.app/)
 
 ## Command
 
