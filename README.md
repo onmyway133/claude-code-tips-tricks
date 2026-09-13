@@ -26,6 +26,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 5: Sandbox risky commands instead of prompting for each one](#tip-5-sandbox-risky-commands-instead-of-prompting-for-each-one)
 - [Tip 6: Script Claude into CI and pre-commit hooks](#tip-6-script-claude-into-ci-and-pre-commit-hooks)
 - [Tip 7: Bootstrap CLAUDE.md with /init instead of starting from a blank file](#tip-7-bootstrap-claudemd-with-init-instead-of-starting-from-a-blank-file)
+- [Tip 8: Be aware of ultra features](#tip-8-be-aware-of-ultra-features)
 
 ### Agent
 - [Tip 1: Define reusable subagents instead of re-explaining a role every time](#tip-1-define-reusable-subagents-instead-of-re-explaining-a-role-every-time)
@@ -278,6 +279,24 @@ Example:
 ```
 
 Reference: [CLAUDE.md files](https://code.claude.com/docs/en/memory)
+
+### Tip 8: Be aware of ultra features
+
+Claude Code has picked up several features named around "ultra," and they're easy to mix up since only one of them is a slash command in the usual sense. `/code-review ultra` (aliased `/ultrareview` where available) is a research-preview command that sends a branch diff or GitHub PR to a fleet of reviewer agents running in a remote sandbox, with every finding independently reproduced before it's reported back, a heavier and slower tool than the local `/code-review`. `/effort ultracode` is a session setting, not a model effort level: it pushes reasoning to `xhigh` and turns on automatic workflow orchestration so Claude plans and executes multi-step tasks with its own dynamic subagent workflows.
+
+It's easy to assume "ultracode" also works as an inline prompt keyword the way other effort boosts do, but it doesn't. That inline trigger is a different word, `ultrathink`, which asks for deeper reasoning on just that one turn without touching your session's effort setting at all. And if you're looking for `/ultraplan`, stop: Anthropic retired the command, its keyword trigger, and the plan-approval dialog option that used to launch it, pointing people toward Plan Mode or Claude Code on the web instead.
+
+See [tips/ultra-features.md](tips/ultra-features.md) for a full comparison table, including model and account requirements for each.
+
+Example:
+```
+/code-review ultra
+```
+```
+ultrathink: find the root cause of the race condition in the connection pool, then fix it
+```
+
+Reference: [Ultrareview](https://code.claude.com/docs/en/ultrareview), [Model configuration](https://code.claude.com/docs/en/model-config)
 
 ## Agent
 
