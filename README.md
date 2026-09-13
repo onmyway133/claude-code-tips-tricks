@@ -32,28 +32,29 @@ Collection of my favorite Claude Code tips as I explore it.
 ### Skill
 - [Tip 17: Ship skills your team can invoke but Claude won't guess at](#tip-17-ship-skills-your-team-can-invoke-but-claude-wont-guess-at)
 - [Tip 18: Reach for another CLI when WebFetch hits a wall](#tip-18-reach-for-another-cli-when-webfetch-hits-a-wall)
+- [Tip 19: Give Claude a real browser instead of just a page fetch](#tip-19-give-claude-a-real-browser-instead-of-just-a-page-fetch)
 
 ### Mcp
-- [Tip 19: Bundle MCP servers, skills, and hooks together as a plugin](#tip-19-bundle-mcp-servers-skills-and-hooks-together-as-a-plugin)
-- [Tip 20: Tune how aggressively Claude loads your MCP tool definitions](#tip-20-tune-how-aggressively-claude-loads-your-mcp-tool-definitions)
+- [Tip 20: Bundle MCP servers, skills, and hooks together as a plugin](#tip-20-bundle-mcp-servers-skills-and-hooks-together-as-a-plugin)
+- [Tip 21: Tune how aggressively Claude loads your MCP tool definitions](#tip-21-tune-how-aggressively-claude-loads-your-mcp-tool-definitions)
 
 ### Prompt
-- [Tip 21: Have Claude interview you before building something big](#tip-21-have-claude-interview-you-before-building-something-big)
-- [Tip 22: Write the code in one session, review it in another](#tip-22-write-the-code-in-one-session-review-it-in-another)
-- [Tip 23: Put your planning effort into plan mode, not into micromanaging](#tip-23-put-your-planning-effort-into-plan-mode-not-into-micromanaging)
+- [Tip 22: Have Claude interview you before building something big](#tip-22-have-claude-interview-you-before-building-something-big)
+- [Tip 23: Write the code in one session, review it in another](#tip-23-write-the-code-in-one-session-review-it-in-another)
+- [Tip 24: Put your planning effort into plan mode, not into micromanaging](#tip-24-put-your-planning-effort-into-plan-mode-not-into-micromanaging)
 
 ### Hooks
-- [Tip 24: Hook into specific moments in Claude's lifecycle](#tip-24-hook-into-specific-moments-in-claudes-lifecycle)
-- [Tip 25: Auto-format on every edit with a PostToolUse hook](#tip-25-auto-format-on-every-edit-with-a-posttooluse-hook)
-- [Tip 26: Use a Stop hook as a deterministic gate for unattended runs](#tip-26-use-a-stop-hook-as-a-deterministic-gate-for-unattended-runs)
-- [Tip 27: Get worktree isolation on non-git version control](#tip-27-get-worktree-isolation-on-non-git-version-control)
+- [Tip 25: Hook into specific moments in Claude's lifecycle](#tip-25-hook-into-specific-moments-in-claudes-lifecycle)
+- [Tip 26: Auto-format on every edit with a PostToolUse hook](#tip-26-auto-format-on-every-edit-with-a-posttooluse-hook)
+- [Tip 27: Use a Stop hook as a deterministic gate for unattended runs](#tip-27-use-a-stop-hook-as-a-deterministic-gate-for-unattended-runs)
+- [Tip 28: Get worktree isolation on non-git version control](#tip-28-get-worktree-isolation-on-non-git-version-control)
 
 ### Workflow
-- [Tip 28: Treat CLAUDE.md as a file that gets smarter, not a README](#tip-28-treat-claudemd-as-a-file-that-gets-smarter-not-a-readme)
-- [Tip 29: Reserve "IMPORTANT" for the one rule Claude keeps missing](#tip-29-reserve-important-for-the-one-rule-claude-keeps-missing)
-- [Tip 30: Let /doctor prune your CLAUDE.md for you](#tip-30-let-doctor-prune-your-claudemd-for-you)
-- [Tip 31: Give Claude a way to check its own work](#tip-31-give-claude-a-way-to-check-its-own-work)
-- [Tip 32: Run risky, unsupervised work in a container](#tip-32-run-risky-unsupervised-work-in-a-container)
+- [Tip 29: Treat CLAUDE.md as a file that gets smarter, not a README](#tip-29-treat-claudemd-as-a-file-that-gets-smarter-not-a-readme)
+- [Tip 30: Reserve "IMPORTANT" for the one rule Claude keeps missing](#tip-30-reserve-important-for-the-one-rule-claude-keeps-missing)
+- [Tip 31: Let /doctor prune your CLAUDE.md for you](#tip-31-let-doctor-prune-your-claudemd-for-you)
+- [Tip 32: Give Claude a way to check its own work](#tip-32-give-claude-a-way-to-check-its-own-work)
+- [Tip 33: Run risky, unsupervised work in a container](#tip-33-run-risky-unsupervised-work-in-a-container)
 
 ## General
 
@@ -309,9 +310,23 @@ Check how Claude Code skills are being discussed on Reddit and summarize the sen
 
 Reference: [Skills](https://code.claude.com/docs/en/skills)
 
+### Tip 19: Give Claude a real browser instead of just a page fetch
+
+WebFetch reads static HTML, so it misses anything a page renders with JavaScript, and it can't click a button, fill in a form, or follow a login flow. [agent-browser](https://github.com/vercel-labs/agent-browser) installs as a Claude Code skill (`npx skills add vercel-labs/agent-browser`) and drives an actual Chrome instance instead of just requesting a URL. Claude takes a snapshot of the page's accessibility tree, gets back stable references like `@e2` for each interactive element, and clicks, types, or screenshots by that reference instead of guessing a CSS selector. That combination, real interaction plus references that don't break when the page layout shifts, is worth reaching for when you're testing your own app end to end, reading a page that only renders after JavaScript runs, or walking through a flow that needs a login. Keep WebFetch for the simple case: pulling text off a page that doesn't need any interaction.
+
+Example:
+```
+npx skills add vercel-labs/agent-browser
+```
+```
+Open our staging checkout page, fill in the test card details, complete the purchase, and screenshot the confirmation screen.
+```
+
+Reference: [agent-browser](https://github.com/vercel-labs/agent-browser)
+
 ## Mcp
 
-### Tip 19: Bundle MCP servers, skills, and hooks together as a plugin
+### Tip 20: Bundle MCP servers, skills, and hooks together as a plugin
 
 Once you're managing more than one or two MCP connections, a plugin is the better unit to work in. A single plugin can bundle language servers, MCP connections, skills, agents, and hooks into one install. Run `/plugin` to install from Anthropic's official marketplace, or stand up an internal one for your org and check the marketplace reference into `settings.json` so every new developer gets it automatically on setup.
 
@@ -326,7 +341,7 @@ claude mcp add sentry --url https://mcp.sentry.dev
 
 Reference: [MCP](https://code.claude.com/docs/en/mcp)
 
-### Tip 20: Tune how aggressively Claude loads your MCP tool definitions
+### Tip 21: Tune how aggressively Claude loads your MCP tool definitions
 
 Every MCP tool's schema counts against your context window before Claude has used it even once, and fifty tools can burn 10-20k tokens before you've typed a word. Tool search is on by default in current versions of Claude Code: instead of loading every schema upfront, Claude searches your tool catalog and pulls in only what the current task needs, up to five tools at a time. Set `ENABLE_TOOL_SEARCH=auto:5` if you want it to kick in earlier, once definitions cross 5% of the context window instead of the default threshold, or set it to `false` if you run a small, stable toolset and would rather load everything upfront and skip the extra round trip.
 
@@ -334,7 +349,7 @@ Reference: [Scale to many tools with tool search](https://code.claude.com/docs/e
 
 ## Prompt
 
-### Tip 21: Have Claude interview you before building something big
+### Tip 22: Have Claude interview you before building something big
 
 For a feature with real design decisions in it, don't start by writing a spec yourself. Start with a one-line prompt and let Claude interview you using the `AskUserQuestion` tool instead. It surfaces edge cases, tradeoffs, and UX questions you haven't considered yet, then writes the result to `SPEC.md`. Start a brand new session to actually build the feature: that session gets a clean context focused entirely on implementation, with a written spec to work from instead of a long back-and-forth it would otherwise have to re-derive.
 
@@ -349,7 +364,7 @@ Keep interviewing until we've covered everything, then write a complete spec to 
 
 Reference: [Best practices](https://code.claude.com/docs/en/best-practices)
 
-### Tip 22: Write the code in one session, review it in another
+### Tip 23: Write the code in one session, review it in another
 
 A session that just wrote a piece of code is biased toward believing it's correct. Open a second session with a fresh context, hand it just the file or the diff, and ask it to review, and it will catch things the first session glossed over. The same split works for tests: have one session write tests first, then a different session write the code that has to pass them.
 
@@ -359,7 +374,7 @@ Session B: `Review the rate limiter implementation in @src/middleware/rateLimite
 
 Reference: [Best practices](https://code.claude.com/docs/en/best-practices)
 
-### Tip 23: Put your planning effort into plan mode, not into micromanaging
+### Tip 24: Put your planning effort into plan mode, not into micromanaging
 
 Shift+Tab cycles into plan mode. The idea is to pour your attention into getting the plan right so Claude can implement it in one pass, rather than course-correcting it turn by turn during implementation. A pattern worth stealing: have one Claude write the plan, then start a second Claude to review it the way a staff engineer would before you approve it. If something goes sideways mid-implementation, go back to plan mode and re-plan instead of trying to patch your way out live.
 
@@ -372,7 +387,7 @@ Reference: [Power user tips](https://support.claude.com/en/articles/14554000-cla
 
 ## Hooks
 
-### Tip 24: Hook into specific moments in Claude's lifecycle
+### Tip 25: Hook into specific moments in Claude's lifecycle
 
 Hooks run your own logic deterministically at fixed points in a session: `SessionStart` when a session begins, `PreToolUse` and `PostToolUse` around every tool call, `PermissionRequest` when Claude is about to ask you for approval, `Stop` when a turn is about to end, and `PostCompact` right after context gets compressed. You don't need to write these by hand from scratch. Ask Claude directly and it will generate one for you, matcher and all.
 
@@ -383,7 +398,7 @@ Write a hook that runs eslint after every file edit
 
 Reference: [Hooks](https://code.claude.com/docs/en/hooks)
 
-### Tip 25: Auto-format on every edit with a PostToolUse hook
+### Tip 26: Auto-format on every edit with a PostToolUse hook
 
 `PostToolUse` is the hook worth setting up first, since it catches formatting issues right after Claude writes or edits a file, before they ever reach CI. Match on the `Write` and `Edit` tools and run your formatter as a command. A failing formatter shouldn't block the edit itself, so a trailing `|| true` keeps the session moving even if formatting fails.
 
@@ -403,13 +418,13 @@ Example: `.claude/settings.json`
 
 Reference: [Hooks](https://code.claude.com/docs/en/hooks)
 
-### Tip 26: Use a Stop hook as a deterministic gate for unattended runs
+### Tip 27: Use a Stop hook as a deterministic gate for unattended runs
 
 For a long run you want to walk away from, a `Stop` hook is more reliable than asking Claude nicely to verify itself before finishing. It runs your check as a script and refuses to let the turn end until that check passes. Claude Code caps this at 8 consecutive blocks and then ends the turn anyway, so a broken check can't trap a session forever. This is the difference between "please run the tests before you finish" as a suggestion and a turn that mechanically cannot end while the tests are red.
 
 Reference: [Hooks](https://code.claude.com/docs/en/hooks)
 
-### Tip 27: Get worktree isolation on non-git version control
+### Tip 28: Get worktree isolation on non-git version control
 
 `--worktree` only works with git, but the isolation it buys you doesn't have to be git-specific. Define `WorktreeCreate` and `WorktreeRemove` hooks in `settings.json`, and Claude Code calls them to set up and tear down an isolated workspace on Mercurial, Perforce, or SVN the same way it would with a native git worktree. This is the only way to get parallel, non-interfering sessions if your team isn't on git, and it's a small amount of hook code for a real workflow unlock.
 
@@ -417,7 +432,7 @@ Reference: [Hooks](https://code.claude.com/docs/en/hooks)
 
 ## Workflow
 
-### Tip 28: Treat CLAUDE.md as a file that gets smarter, not a README
+### Tip 29: Treat CLAUDE.md as a file that gets smarter, not a README
 
 CLAUDE.md isn't documentation, it's instructions: naming rules, test commands, style preferences, and mistakes Claude has made before. When Claude gets something wrong, fix the immediate problem, then ask it to update CLAUDE.md so the same mistake doesn't happen again. Boris Cherny calls this "Compounding Engineering": every caught mistake becomes prevention for every future session, and because the file is checked into git, one engineer's fix helps the whole team. If you've installed the GitHub Action, you can even trigger this straight from a PR comment.
 
@@ -428,7 +443,7 @@ Example:
 
 Reference: [CLAUDE.md files](https://code.claude.com/docs/en/memory)
 
-### Tip 29: Reserve "IMPORTANT" for the one rule Claude keeps missing
+### Tip 30: Reserve "IMPORTANT" for the one rule Claude keeps missing
 
 If Claude keeps skipping a specific instruction in CLAUDE.md, adding emphasis like "IMPORTANT" to that single line pulls it back into focus. The catch is that this only works if you use it sparingly: emphasize five lines and none of them stand out anymore. Save it for the rule that's actually getting ignored, not as your default way of writing every line in CLAUDE.md.
 
@@ -439,13 +454,13 @@ IMPORTANT: never commit directly to main, always open a PR.
 
 Reference: [Best practices](https://code.claude.com/docs/en/best-practices)
 
-### Tip 30: Let /doctor prune your CLAUDE.md for you
+### Tip 31: Let /doctor prune your CLAUDE.md for you
 
 A CLAUDE.md file grows over time, and a bloated one is exactly what causes Claude to miss instructions buried in the noise. Run `/doctor` on a checked-in CLAUDE.md and Claude proposes cuts for anything it can already derive by reading the codebase, like standard language conventions or self-evident practices you didn't need to spell out. Treat the file like code: review it when something goes wrong, prune it on a schedule, and confirm a change actually shifted Claude's behavior instead of assuming it will.
 
 Reference: [Best practices](https://code.claude.com/docs/en/best-practices)
 
-### Tip 31: Give Claude a way to check its own work
+### Tip 32: Give Claude a way to check its own work
 
 This is the single most valuable habit on this whole list. Without a feedback loop, Claude assumes its output is correct and stops there. With one, it iterates until the output actually is correct. What that loop looks like depends on the domain: a screenshot compared against a spec for web work, a simulator run for mobile, a test suite for a backend. Boris Cherny estimates this alone is worth a 2-3x improvement in output quality. Before starting anything nontrivial, ask what "done and correct" looks like, and make sure Claude has a way to check it, not just a way to claim it.
 
@@ -456,7 +471,7 @@ Implement the checkout flow, then take a screenshot of the final state and compa
 
 Reference: [Best practices](https://code.claude.com/docs/en/best-practices)
 
-### Tip 32: Run risky, unsupervised work in a container
+### Tip 33: Run risky, unsupervised work in a container
 
 A session running with `--dangerously-skip-permissions` shouldn't run on your host machine, because if something goes wrong there's nothing containing the damage. Move that session into a container instead, and a bad outcome stays inside the container. This is the right setup for long research tasks, or for something like patching a minified CLI bundle after an upgrade: Claude can explore, apply a patch, notice it didn't work, and iterate, all without you approving each step, because the blast radius is contained by the environment rather than by your attention.
 
