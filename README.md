@@ -32,6 +32,7 @@ Collection of my favorite Claude Code tips as I explore it.
 ### Skill
 - [Tip 18: Ship skills your team can invoke but Claude won't guess at](#tip-18-ship-skills-your-team-can-invoke-but-claude-wont-guess-at)
 - [Tip 19: Reach for another CLI when WebFetch hits a wall](#tip-19-reach-for-another-cli-when-webfetch-hits-a-wall)
+- [Tip 35: Let a plugin enforce TDD and root-cause debugging discipline](#tip-35-let-a-plugin-enforce-tdd-and-root-cause-debugging-discipline)
 
 ### Mcp
 - [Tip 21: Bundle MCP servers, skills, and hooks together as a plugin](#tip-21-bundle-mcp-servers-skills-and-hooks-together-as-a-plugin)
@@ -309,6 +310,20 @@ Check how Claude Code skills are being discussed on Reddit and summarize the sen
 ```
 
 Reference: [Skills](https://code.claude.com/docs/en/skills)
+
+### Tip 35: Let a plugin enforce TDD and root-cause debugging discipline
+
+Left alone, Claude tends to jump straight to code. The [Superpowers](https://claude.com/plugins/superpowers) plugin is a skill pack that pushes back on that: it forces red-green-refactor TDD, so a test has to fail before any implementation gets written, and it runs a four-phase debugging process that investigates the root cause instead of guessing at a fix. It also ships a brainstorming skill that questions your requirements before any code gets touched, and a review skill that hands the diff to a separate subagent instead of grading its own homework. These skills activate on their own once installed, so you don't have to invoke them by name, and every session inherits the same discipline instead of you re-explaining "write the test first" in every prompt.
+
+Example:
+```
+/plugin install superpowers@claude-plugins-official
+```
+```
+Add rate limiting to the public API.
+```
+
+Reference: [Discover and install plugins](https://code.claude.com/docs/en/discover-plugins)
 
 ## Mcp
 
