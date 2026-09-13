@@ -33,11 +33,13 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 18: Ship skills your team can invoke but Claude won't guess at](#tip-18-ship-skills-your-team-can-invoke-but-claude-wont-guess-at)
 - [Tip 19: Reach for another CLI when WebFetch hits a wall](#tip-19-reach-for-another-cli-when-webfetch-hits-a-wall)
 - [Tip 35: Let a plugin enforce TDD and root-cause debugging discipline](#tip-35-let-a-plugin-enforce-tdd-and-root-cause-debugging-discipline)
+- [Tip 36: Give Claude a real browser for pages WebFetch can't handle](#tip-36-give-claude-a-real-browser-for-pages-webfetch-cant-handle)
 
 ### Mcp
 - [Tip 21: Bundle MCP servers, skills, and hooks together as a plugin](#tip-21-bundle-mcp-servers-skills-and-hooks-together-as-a-plugin)
 - [Tip 22: Tune how aggressively Claude loads your MCP tool definitions](#tip-22-tune-how-aggressively-claude-loads-your-mcp-tool-definitions)
 - [Tip 34: Keep raw tool output out of your context with a sandboxed MCP server](#tip-34-keep-raw-tool-output-out-of-your-context-with-a-sandboxed-mcp-server)
+- [Tip 37: Give Claude persistent memory across sessions with claude-mem](#tip-37-give-claude-persistent-memory-across-sessions-with-claude-mem)
 
 ### Prompt
 - [Tip 23: Have Claude interview you before building something big](#tip-23-have-claude-interview-you-before-building-something-big)
@@ -325,6 +327,20 @@ Add rate limiting to the public API.
 
 Reference: [Discover and install plugins](https://code.claude.com/docs/en/discover-plugins)
 
+### Tip 36: Give Claude a real browser for pages WebFetch can't handle
+
+WebFetch reads static HTML, so it misses anything a page only renders after JavaScript runs, and it can't click a button, fill in a form, or step through a login. [agent-browser](https://github.com/vercel-labs/agent-browser) installs as a skill (`npx skills add vercel-labs/agent-browser`) and drives a real Chrome instance instead. Claude reads the page's accessibility tree and gets back stable references like `@e2` for each interactive element, then clicks, types, or screenshots against that reference instead of guessing a CSS selector that breaks the moment the layout shifts. Reach for this when you're testing your own app end to end, reading a page that only renders after JavaScript runs, or walking through a flow that needs a login. Keep WebFetch for the simple case: pulling text off a page that doesn't need any interaction.
+
+Example:
+```
+npx skills add vercel-labs/agent-browser
+```
+```
+Open our staging checkout page, fill in the test card details, complete the purchase, and screenshot the confirmation screen.
+```
+
+Reference: [agent-browser](https://github.com/vercel-labs/agent-browser)
+
 ## Mcp
 
 ### Tip 21: Bundle MCP servers, skills, and hooks together as a plugin
@@ -359,6 +375,22 @@ Count the exported functions in every .ts file under src/, then report only the 
 With context-mode installed, Claude runs this in the sandbox and returns a 10-line summary instead of reading all the files into context.
 
 Reference: [context-mode](https://github.com/mksglu/context-mode)
+
+### Tip 37: Give Claude persistent memory across sessions with claude-mem
+
+Session resume with `--continue` or `--resume` replays a transcript, and CLAUDE.md only holds what you type into it yourself. Neither one remembers what Claude actually found out while working. [claude-mem](https://github.com/thedotmack/claude-mem) fills that gap: a plugin that hooks into five points in Claude's lifecycle and captures decisions, bug fixes, and other observations into a local SQLite and vector store as you go. A `SessionStart` hook then feeds the relevant slice of that history back in automatically at the start of your next session, no manual note-taking required. Install it from the plugin marketplace and restart Claude Code and it starts capturing immediately, no slash command needed to turn it on. Once enough history has built up, the bundled `mem-search` skill lets you ask about your own project's past in plain language. Wrap anything sensitive in `<private>` tags to keep it out of storage. Everything runs locally by default, and signing in only adds an optional hosted memory tier on top.
+
+Example:
+```
+/plugin marketplace add thedotmack/claude-mem
+/plugin install claude-mem
+```
+Then, in a later session:
+```
+What did we decide about the retry policy in the payments service?
+```
+
+Reference: [claude-mem](https://github.com/thedotmack/claude-mem)
 
 ## Prompt
 
