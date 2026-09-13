@@ -47,6 +47,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 1: Have Claude interview you before building something big](#tip-1-have-claude-interview-you-before-building-something-big)
 - [Tip 2: Write the code in one session, review it in another](#tip-2-write-the-code-in-one-session-review-it-in-another)
 - [Tip 3: Put your planning effort into plan mode, not into micromanaging](#tip-3-put-your-planning-effort-into-plan-mode-not-into-micromanaging)
+- [Tip 4: Move plans out of the 30-day cache and into your repo](#tip-4-move-plans-out-of-the-30-day-cache-and-into-your-repo)
 
 ### Hooks
 - [Tip 1: Hook into specific moments in Claude's lifecycle](#tip-1-hook-into-specific-moments-in-claudes-lifecycle)
@@ -461,6 +462,19 @@ Plan a migration of our session storage from Redis to Postgres. Don't write any 
 ```
 
 Reference: [Power user tips](https://support.claude.com/en/articles/14554000-claude-code-power-user-tips)
+
+### Tip 4: Move plans out of the 30-day cache and into your repo
+
+Plan mode writes every plan to `~/.claude/plans` by default — a global folder outside your project that Claude Code's cleanup routine clears out after 30 days. That's fine for a plan you'll implement the same afternoon, but not for one you want to diff, revisit weeks later, or hand to a teammate. Set `plansDirectory` in `.claude/settings.json` to a repo-relative path, and plans land there instead, version-controlled right alongside the code they describe. If you want more structure than a flat folder of plan files — grouping by feature, tracking each one's state as work progresses — a tool like [kaji](https://github.com/onmyway133/kaji) builds that folder hierarchy for you and is designed around this same explore-plan-implement workflow.
+
+Example:
+```json
+{
+  "plansDirectory": "./plans"
+}
+```
+
+Reference: [Settings reference](https://code.claude.com/docs/en/settings-reference)
 
 ## Hooks
 
