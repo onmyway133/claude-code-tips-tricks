@@ -16,6 +16,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 7: Understand what auto mode is actually deciding for you](#tip-7-understand-what-auto-mode-is-actually-deciding-for-you)
 - [Tip 8: Track your token spend with ccusage](#tip-8-track-your-token-spend-with-ccusage)
 - [Tip 9: Organize multiple projects with a terminal multiplexer app](#tip-9-organize-multiple-projects-with-a-terminal-multiplexer-app)
+- [Tip 10: See every background session in one screen with agent view](#tip-10-see-every-background-session-in-one-screen-with-agent-view)
 
 ### Command
 - [Tip 1: Give Claude a standing goal for the whole session](#tip-1-give-claude-a-standing-goal-for-the-whole-session)
@@ -174,6 +175,23 @@ npx skills add github.com/muxy-app/muxy/tree/main/Muxy/Resources/skills/muxy-cli
 ```
 
 Reference: [Muxy](https://muxy.app/)
+
+### Tip 10: See every background session in one screen with agent view
+
+`claude agents` opens one screen listing every background session you have running: what needs your input, what's still working, and what's finished. Sessions group under those three headers, so you can scan a dozen tasks at once instead of opening each transcript to check on it. Type into the dispatch input at the bottom to start a new background session right from the list, or press Enter on a row to attach and drop into the full interactive session, complete with a short recap of what happened while you were away. Press the left arrow or run `/exit` to detach and return to the list. Run `/background` (or `/bg`) from any interactive session to send it to the background instead of quitting it, and `/fork` to split off a copy of the current conversation as a new row while the original keeps running. It's in research preview, and background sessions burn through your subscription usage the same as an interactive one: ten running in parallel costs roughly ten times what one does.
+
+![](images/agent_view.png)
+
+Example:
+```
+claude agents
+```
+Then type at the dispatch input:
+```
+run the test suite and fix any failures
+```
+
+Reference: [Manage multiple agents with agent view](https://code.claude.com/docs/en/agent-view)
 
 ## Command
 
