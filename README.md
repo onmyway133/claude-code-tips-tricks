@@ -47,6 +47,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 2: Tune how aggressively Claude loads your MCP tool definitions](#tip-2-tune-how-aggressively-claude-loads-your-mcp-tool-definitions)
 - [Tip 3: Keep raw tool output out of your context with a sandboxed MCP server](#tip-3-keep-raw-tool-output-out-of-your-context-with-a-sandboxed-mcp-server)
 - [Tip 4: Give Claude persistent memory across sessions with claude-mem](#tip-4-give-claude-persistent-memory-across-sessions-with-claude-mem)
+- [Tip 5: Bridge Claude Code and Codex with a plugin](#tip-5-bridge-claude-code-and-codex-with-a-plugin)
 
 ### Prompt
 - [Tip 1: Have Claude interview you before building something big](#tip-1-have-claude-interview-you-before-building-something-big)
@@ -520,6 +521,19 @@ What did we decide about the retry policy in the payments service?
 ```
 
 Reference: [claude-mem](https://github.com/thedotmack/claude-mem)
+
+### Tip 5: Bridge Claude Code and Codex with a plugin
+
+Claude Code and Codex CLI don't talk to each other by default, even when they sit on the same machine and repo. OpenAI's [codex-plugin-cc](https://github.com/openai/codex-plugin-cc) plugin adds that bridge: it delegates work to your local Codex CLI and reads the result back, using the same install and login you already have. `/codex:review` runs a normal Codex code review on your uncommitted changes or a branch diff, and `/codex:rescue` hands a stuck task, like a failing build or a flaky test, to a `codex:codex-rescue` subagent. Both support `--background`, so you can keep working in Claude Code while Codex runs, then check in with `/codex:status` and `/codex:result`. `/codex:transfer` goes the other direction: it turns your current Claude Code conversation into a Codex thread you can resume with `codex resume <session-id>`. Install it with `/plugin marketplace add openai/codex-plugin-cc` and `/plugin install codex@openai-codex`, then run `/codex:setup` to confirm Codex is installed and signed in. It needs Node.js 18.18 or later, plus a ChatGPT subscription or an OpenAI API key.
+
+Example:
+```
+/codex:review --background
+/codex:status
+/codex:result
+```
+
+Reference: [codex-plugin-cc](https://github.com/openai/codex-plugin-cc)
 
 ## Prompt
 
