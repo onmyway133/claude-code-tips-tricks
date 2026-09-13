@@ -41,6 +41,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 3: Let a plugin enforce TDD and root-cause debugging discipline](#tip-3-let-a-plugin-enforce-tdd-and-root-cause-debugging-discipline)
 - [Tip 4: Give Claude a real browser for pages WebFetch can't handle](#tip-4-give-claude-a-real-browser-for-pages-webfetch-cant-handle)
 - [Tip 5: Browse skills.sh before writing one from scratch](#tip-5-browse-skillssh-before-writing-one-from-scratch)
+- [Tip 6: Use skill-creator to create new skill](#tip-6-use-skill-creator-to-create-new-skill)
 
 ### Mcp
 - [Tip 1: Bundle MCP servers, skills, and hooks together as a plugin](#tip-1-bundle-mcp-servers-skills-and-hooks-together-as-a-plugin)
@@ -464,6 +465,22 @@ npx skills update
 ```
 
 Reference: [skills.sh](https://www.skills.sh)
+
+### Tip 6: Use skill-creator to create new skill
+
+Writing a `SKILL.md` by hand usually means guessing at the description and shipping it untested. The official [skill-creator](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/skill-creator) plugin turns that into a loop: draft the skill, write a handful of test prompts, run them with a Claude instance that has the skill against one that doesn't, and compare the outputs side by side in a local viewer. You look at the results, give feedback, and it rewrites the skill and reruns until the outputs are good.
+
+Once the skill behaves the way you want, it has a separate step for optimizing the `description` field in the frontmatter. That field is the only thing Claude reads to decide whether to auto-invoke a skill, so a vague description means Claude either ignores the skill when it should fire or fires it when it shouldn't. The optimizer scores candidate descriptions against your test prompts and picks the one that triggers most reliably.
+
+Example:
+```
+/plugin install skill-creator@claude-plugins-official
+```
+```
+I want a skill that reviews Terraform plans for cost regressions before merge. Help me build and test it.
+```
+
+Reference: [skill-creator](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/skill-creator)
 
 ## Mcp
 
