@@ -59,6 +59,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 2: Auto-format on every edit with a PostToolUse hook](#tip-2-auto-format-on-every-edit-with-a-posttooluse-hook)
 - [Tip 3: Use a Stop hook as a deterministic gate for unattended runs](#tip-3-use-a-stop-hook-as-a-deterministic-gate-for-unattended-runs)
 - [Tip 4: Get worktree isolation on non-git version control](#tip-4-get-worktree-isolation-on-non-git-version-control)
+- [Tip 5: Turn hooks into ambient audio cues](#tip-5-turn-hooks-into-ambient-audio-cues)
 
 ### Workflow
 - [Tip 1: Treat CLAUDE.md as a file that gets smarter, not a README](#tip-1-treat-claudemd-as-a-file-that-gets-smarter-not-a-readme)
@@ -614,6 +615,25 @@ Reference: [Hooks](https://code.claude.com/docs/en/hooks)
 ### Tip 4: Get worktree isolation on non-git version control
 
 `--worktree` only works with git, but the isolation it buys you doesn't have to be git-specific. Define `WorktreeCreate` and `WorktreeRemove` hooks in `settings.json`, and Claude Code calls them to set up and tear down an isolated workspace on Mercurial, Perforce, or SVN the same way it would with a native git worktree. This is the only way to get parallel, non-interfering sessions if your team isn't on git, and it's a small amount of hook code for a real workflow unlock.
+
+Reference: [Hooks](https://code.claude.com/docs/en/hooks)
+
+### Tip 5: Turn hooks into ambient audio cues
+
+Hooks don't have to check things — they can just make noise. Wire a `Stop` hook to play a short sound file and you get an audible signal the moment Claude finishes a turn, so you can tab away to another window instead of watching the terminal for a response to land. Add `SessionStart` for a "session begins" chime, or `PreCompact` as a heads-up that your context is about to get rewritten. The part that actually matters: append `&` to the player command so it runs in the background — without it, the sound blocks the hook and delays whatever Claude does next. On macOS, `afplay` needs no extra install; Linux has `paplay` or `aplay`, and Windows can shell out to a PowerShell media call. Stick to two or three events — a hook that fires on every tool call turns your terminal into noise, not a signal.
+
+Example: `.claude/settings.json`
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [{ "type": "command", "command": "afplay ~/.claude/sounds/done.mp3 &" }]
+      }
+    ]
+  }
+}
+```
 
 Reference: [Hooks](https://code.claude.com/docs/en/hooks)
 
