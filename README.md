@@ -13,10 +13,10 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 4: Turn on Explanatory or Learning mode to study a codebase](#tip-4-turn-on-explanatory-or-learning-mode-to-study-a-codebase)
 - [Tip 5: Move sessions between your laptop, phone, and the cloud](#tip-5-move-sessions-between-your-laptop-phone-and-the-cloud)
 - [Tip 6: Turn a recurring task into a loop or a scheduled job](#tip-6-turn-a-recurring-task-into-a-loop-or-a-scheduled-job)
-- [Tip 7: Understand what auto mode is actually deciding for you](#tip-7-understand-what-auto-mode-is-actually-deciding-for-you)
+- [Tip 7: Understand what auto mode decides for you](#tip-7-understand-what-auto-mode-decides-for-you)
 - [Tip 8: Track your token spend with ccusage](#tip-8-track-your-token-spend-with-ccusage)
 - [Tip 9: Organize multiple projects with a terminal multiplexer app](#tip-9-organize-multiple-projects-with-a-terminal-multiplexer-app)
-- [Tip 10: See every background session in one screen with agent view](#tip-10-see-every-background-session-in-one-screen-with-agent-view)
+- [Tip 10: View all background sessions with agent view](#tip-10-view-all-background-sessions-with-agent-view)
 
 ### Command
 - [Tip 1: Give Claude a standing goal for the whole session](#tip-1-give-claude-a-standing-goal-for-the-whole-session)
@@ -30,14 +30,14 @@ Collection of my favorite Claude Code tips as I explore it.
 
 ### Agent
 - [Tip 1: Define reusable subagents instead of re-explaining a role every time](#tip-1-define-reusable-subagents-instead-of-re-explaining-a-role-every-time)
-- [Tip 2: Delegate research to a subagent so it doesn't eat your context](#tip-2-delegate-research-to-a-subagent-so-it-doesnt-eat-your-context)
+- [Tip 2: Delegate research to a subagent to keep it out of your context](#tip-2-delegate-research-to-a-subagent-to-keep-it-out-of-your-context)
 - [Tip 3: Have a fresh subagent grade the work before you call it done](#tip-3-have-a-fresh-subagent-grade-the-work-before-you-call-it-done)
 - [Tip 4: Batch large changes across worktree-isolated agents](#tip-4-batch-large-changes-across-worktree-isolated-agents)
-- [Tip 5: Reach for agent teams when work needs teammates, not just workers](#tip-5-reach-for-agent-teams-when-work-needs-teammates-not-just-workers)
+- [Tip 5: Use agent teams when work needs multiple roles, not just parallel copies](#tip-5-use-agent-teams-when-work-needs-multiple-roles-not-just-parallel-copies)
 
 ### Skill
-- [Tip 1: Ship skills your team can invoke but Claude won't guess at](#tip-1-ship-skills-your-team-can-invoke-but-claude-wont-guess-at)
-- [Tip 2: Reach for another CLI when WebFetch hits a wall](#tip-2-reach-for-another-cli-when-webfetch-hits-a-wall)
+- [Tip 1: Restrict a skill to manual invocation so Claude doesn't guess when to use it](#tip-1-restrict-a-skill-to-manual-invocation-so-claude-doesnt-guess-when-to-use-it)
+- [Tip 2: Use another CLI when WebFetch can't fetch a page](#tip-2-use-another-cli-when-webfetch-cant-fetch-a-page)
 - [Tip 3: Let a plugin enforce TDD and root-cause debugging discipline](#tip-3-let-a-plugin-enforce-tdd-and-root-cause-debugging-discipline)
 - [Tip 4: Give Claude a real browser for pages WebFetch can't handle](#tip-4-give-claude-a-real-browser-for-pages-webfetch-cant-handle)
 - [Tip 5: Browse skills.sh before writing one from scratch](#tip-5-browse-skillssh-before-writing-one-from-scratch)
@@ -64,7 +64,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 5: Turn hooks into ambient audio cues](#tip-5-turn-hooks-into-ambient-audio-cues)
 
 ### Workflow
-- [Tip 1: Treat CLAUDE.md as a file that gets smarter, not a README](#tip-1-treat-claudemd-as-a-file-that-gets-smarter-not-a-readme)
+- [Tip 1: Treat CLAUDE.md as a file you keep improving, not a one-time README](#tip-1-treat-claudemd-as-a-file-you-keep-improving-not-a-one-time-readme)
 - [Tip 2: Reserve "IMPORTANT" for the one rule Claude keeps missing](#tip-2-reserve-important-for-the-one-rule-claude-keeps-missing)
 - [Tip 3: Let /doctor prune your CLAUDE.md for you](#tip-3-let-doctor-prune-your-claudemd-for-you)
 - [Tip 4: Give Claude a way to check its own work](#tip-4-give-claude-a-way-to-check-its-own-work)
@@ -146,7 +146,7 @@ Example:
 
 Reference: [Power user tips](https://support.claude.com/en/articles/14554000-claude-code-power-user-tips)
 
-### Tip 7: Understand what auto mode is actually deciding for you
+### Tip 7: Understand what auto mode decides for you
 
 On Pro, Max, and Team plans, auto mode is the default permission mode for interactive terminal and VS Code sessions. A separate classifier model reviews each action before it runs and approves the routine ones on its own, only stopping you for things like scope escalation, unfamiliar infrastructure, or an action that looks driven by hostile content Claude just read. You can switch modes at any point in a session with Shift+Tab if you'd rather approve everything by hand for a while. For scripted runs, pass the mode explicitly instead of relying on the interactive default, and know that a non-interactive run doesn't stop just because the classifier blocks a few actions in a row.
 
@@ -180,7 +180,7 @@ npx skills add github.com/muxy-app/muxy/tree/main/Muxy/Resources/skills/muxy-cli
 
 Reference: [Muxy](https://muxy.app/)
 
-### Tip 10: See every background session in one screen with agent view
+### Tip 10: View all background sessions with agent view
 
 `claude agents` opens one screen listing every background session you have running: what needs your input, what's still working, and what's finished. Sessions group under those three headers, so you can scan a dozen tasks at once instead of opening each transcript to check on it.
 
@@ -317,7 +317,7 @@ You are a read-only agent that cannot edit files or run bash.
 
 Reference: [Subagents](https://code.claude.com/docs/en/sub-agents)
 
-### Tip 2: Delegate research to a subagent so it doesn't eat your context
+### Tip 2: Delegate research to a subagent to keep it out of your context
 
 Context is the real constraint in a long session, and exploration is usually the biggest cost against it. Tell Claude to use a subagent to investigate something, and that research happens in a separate context entirely, leaving your main conversation focused on implementation. This matters most on an unfamiliar codebase, where the alternative is burning through half your context window finding the right files before you've written a line of code.
 
@@ -362,7 +362,7 @@ Migrate all sync IO to async. Batch the changes and launch 10 parallel agents wi
 
 Reference: [Power user tips](https://support.claude.com/en/articles/14554000-claude-code-power-user-tips)
 
-### Tip 5: Reach for agent teams when work needs teammates, not just workers
+### Tip 5: Use agent teams when work needs multiple roles, not just parallel copies
 
 A subagent hands back one result and disappears. An agent team keeps every teammate alive as its own full Claude Code session, one that can message any other teammate directly and pull work off a task list the whole team shares. One session takes the lead, spawning teammates and handing out tasks, but you can talk to any teammate directly and redirect it yourself without going through the lead.
 
@@ -385,7 +385,7 @@ Reference: [Agent teams](https://code.claude.com/docs/en/agent-teams)
 
 ## Skill
 
-### Tip 1: Ship skills your team can invoke but Claude won't guess at
+### Tip 1: Restrict a skill to manual invocation so Claude doesn't guess when to use it
 
 A skill is a `SKILL.md` file under `.claude/skills/<name>/` with a `name` and `description`, and Claude applies it automatically when it looks relevant, or you can call it directly with `/skill-name`. Some skills shouldn't be auto-invoked, like an issue-fixer that takes an argument and touches multiple files on your say-so alone. Set `disable-model-invocation: true` in the frontmatter for those, and the skill only runs when someone explicitly asks for it by name.
 
@@ -409,7 +409,7 @@ Example:
 
 Reference: [Skills](https://code.claude.com/docs/en/skills)
 
-### Tip 2: Reach for another CLI when WebFetch hits a wall
+### Tip 2: Use another CLI when WebFetch can't fetch a page
 
 WebFetch can't reach every site, Reddit is a common example. Rather than giving up, write a skill that shells out to a different CLI with its own web access through a tmux session: start it, send the query, capture the output, parse the result. Package this as a skill instead of pasting the same instructions into CLAUDE.md, since a skill only loads into context when Claude actually needs it, while anything in CLAUDE.md loads into every single conversation whether that conversation needs it or not.
 
@@ -672,7 +672,7 @@ Reference: [Hooks](https://code.claude.com/docs/en/hooks)
 
 ## Workflow
 
-### Tip 1: Treat CLAUDE.md as a file that gets smarter, not a README
+### Tip 1: Treat CLAUDE.md as a file you keep improving, not a one-time README
 
 CLAUDE.md isn't documentation, it's instructions: naming rules, test commands, style preferences, and mistakes Claude has made before. When Claude gets something wrong, fix the immediate problem, then ask it to update CLAUDE.md so the same mistake doesn't happen again. Boris Cherny calls this "Compounding Engineering": every caught mistake becomes prevention for every future session, and because the file is checked into git, one engineer's fix helps the whole team. If you've installed the GitHub Action, you can even trigger this straight from a PR comment.
 
