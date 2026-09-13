@@ -19,6 +19,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 10: View all background sessions with agent view](#tip-10-view-all-background-sessions-with-agent-view)
 - [Tip 11: Install a language server plugin for real code navigation](#tip-11-install-a-language-server-plugin-for-real-code-navigation)
 - [Tip 12: Check your context usage with /context](#tip-12-check-your-context-usage-with-context)
+- [Tip 13: Analyze your usage patterns with /insights](#tip-13-analyze-your-usage-patterns-with-insights)
 
 ### Command
 - [Tip 1: Give Claude a standing goal for the whole session](#tip-1-give-claude-a-standing-goal-for-the-whole-session)
@@ -236,6 +237,21 @@ Example:
 ```
 
 Reference: [Context window](https://code.claude.com/docs/en/context-window)
+
+### Tip 13: Analyze your usage patterns with /insights
+
+Run `/insights` for a report on how you work, not how many tokens you've burned. It looks at your recent sessions on this machine and writes an HTML report covering what you spend time on, friction points like misunderstood requests or buggy code, and features worth trying that you haven't picked up yet. A single run covers up to 200 sessions it hasn't seen before and skips very short ones; when sessions are left out, the header shows the analyzed count against the total, like `200 sessions (412 total)`.
+
+The report lands at `~/.claude/usage-data/report.html`, and each run keeps a timestamped copy alongside it instead of overwriting the last one, so you can compare over time. Reports follow the same cleanup schedule as other session data and get deleted after `cleanupPeriodDays` (30 days by default). It only sees sessions on this machine, not other devices or claude.ai, and it's not available from cloud sessions at all. Unlike ccusage (Tip 8), which parses local logs for free, `/insights` runs through your actual account, so a report counts against your plan or API usage like any other command.
+
+![](images/insights.png)
+
+Example:
+```
+/insights
+```
+
+Reference: [Manage costs effectively: Analyze your usage patterns](https://code.claude.com/docs/en/costs#analyze-your-usage-patterns)
 
 ## Command
 
