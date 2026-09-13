@@ -14,6 +14,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 5: Move sessions between your laptop, phone, and the cloud](#tip-5-move-sessions-between-your-laptop-phone-and-the-cloud)
 - [Tip 6: Turn a recurring task into a loop or a scheduled job](#tip-6-turn-a-recurring-task-into-a-loop-or-a-scheduled-job)
 - [Tip 7: Understand what auto mode is actually deciding for you](#tip-7-understand-what-auto-mode-is-actually-deciding-for-you)
+- [Tip 8: Track your token spend with ccusage](#tip-8-track-your-token-spend-with-ccusage)
 
 ### Command
 - [Tip 1: Give Claude a standing goal for the whole session](#tip-1-give-claude-a-standing-goal-for-the-whole-session)
@@ -148,6 +149,18 @@ claude --permission-mode auto -p "fix all lint errors"
 ```
 
 Reference: [Permission modes](https://code.claude.com/docs/en/permission-modes)
+
+### Tip 8: Track your token spend with ccusage
+
+Claude Code writes every session's token counts to local JSONL logs but doesn't surface spend anywhere on its own. [ccusage](https://github.com/ccusage/ccusage) reads those logs directly and turns them into daily, weekly, monthly, and per-session usage reports, all without sending anything off your machine. It also tracks Claude's 5-hour billing blocks live, so you can watch usage accumulate against your current window instead of finding out you're close to a limit after you've hit it. Costs are estimated from public pricing rather than pulled from your actual bill, so treat the numbers as a close approximation, not a receipt. Run it with `npx` and no install step, which makes it easy to check on a whim or drop into a dashboard script.
+
+Example:
+```
+npx ccusage@latest
+npx ccusage@latest blocks --live
+```
+
+Reference: [ccusage](https://github.com/ccusage/ccusage)
 
 ## Command
 
