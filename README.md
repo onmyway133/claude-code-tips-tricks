@@ -35,6 +35,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 2: Reach for another CLI when WebFetch hits a wall](#tip-2-reach-for-another-cli-when-webfetch-hits-a-wall)
 - [Tip 3: Let a plugin enforce TDD and root-cause debugging discipline](#tip-3-let-a-plugin-enforce-tdd-and-root-cause-debugging-discipline)
 - [Tip 4: Give Claude a real browser for pages WebFetch can't handle](#tip-4-give-claude-a-real-browser-for-pages-webfetch-cant-handle)
+- [Tip 5: Browse skills.sh before writing one from scratch](#tip-5-browse-skillssh-before-writing-one-from-scratch)
 
 ### Mcp
 - [Tip 1: Bundle MCP servers, skills, and hooks together as a plugin](#tip-1-bundle-mcp-servers-skills-and-hooks-together-as-a-plugin)
@@ -358,6 +359,19 @@ Open our staging checkout page, fill in the test card details, complete the purc
 ```
 
 Reference: [agent-browser](https://github.com/vercel-labs/agent-browser)
+
+### Tip 5: Browse skills.sh before writing one from scratch
+
+[skills.sh](https://www.skills.sh) is Vercel's directory of open-source agent skills, searchable by name or by what they do. Before writing a new skill from scratch, check whether someone already published one for the same job. The `npx skills` CLI handles the whole lifecycle: `npx skills add <owner/repo>` installs a skill from the registry, `npx skills list` shows what's installed, and `npx skills update` pulls the latest version of everything you've added instead of you tracking each source repo by hand. It's the same CLI Tip 4's agent-browser example uses to install, just applied as your everyday way of managing every skill you pull in, not a one-off install command.
+
+Example:
+```
+npx skills add vercel-labs/agent-browser
+npx skills list
+npx skills update
+```
+
+Reference: [skills.sh](https://www.skills.sh)
 
 ## Mcp
 
