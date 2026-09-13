@@ -25,6 +25,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 4: Pre-approve the commands you already trust](#tip-4-pre-approve-the-commands-you-already-trust)
 - [Tip 5: Sandbox risky commands instead of prompting for each one](#tip-5-sandbox-risky-commands-instead-of-prompting-for-each-one)
 - [Tip 6: Script Claude into CI and pre-commit hooks](#tip-6-script-claude-into-ci-and-pre-commit-hooks)
+- [Tip 7: Bootstrap CLAUDE.md with /init instead of starting from a blank file](#tip-7-bootstrap-claudemd-with-init-instead-of-starting-from-a-blank-file)
 
 ### Agent
 - [Tip 1: Define reusable subagents instead of re-explaining a role every time](#tip-1-define-reusable-subagents-instead-of-re-explaining-a-role-every-time)
@@ -259,6 +260,17 @@ claude -p "list all API endpoints" --output-format json
 ```
 
 Reference: [Headless mode](https://code.claude.com/docs/en/headless)
+
+### Tip 7: Bootstrap CLAUDE.md with /init instead of starting from a blank file
+
+`/init` is an interactive slash command you run inside a session, not a terminal command. It scans your repo, build files, and configs, then drafts a starter CLAUDE.md with the build and test commands, directory layout, and conventions it can infer on its own. Run it again later and it proposes edits to your existing CLAUDE.md instead of overwriting it. Treat the output as a first draft, not a finished file: it can't guess deployment steps, business rules, or team conventions that live only in people's heads, so add those yourself before committing it. Once it's in, keep improving it the way the Workflow tips below describe, catching a mistake and writing the fix back into the file so the whole team benefits from it.
+
+Example:
+```
+/init
+```
+
+Reference: [CLAUDE.md files](https://code.claude.com/docs/en/memory)
 
 ## Agent
 
