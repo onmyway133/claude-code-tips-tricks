@@ -179,7 +179,11 @@ Reference: [Muxy](https://muxy.app/)
 
 ### Tip 10: See every background session in one screen with agent view
 
-`claude agents` opens one screen listing every background session you have running: what needs your input, what's still working, and what's finished. Sessions group under those three headers, so you can scan a dozen tasks at once instead of opening each transcript to check on it. Type into the dispatch input at the bottom to start a new background session right from the list, or press Enter on a row to attach and drop into the full interactive session, complete with a short recap of what happened while you were away. Press the left arrow or run `/exit` to detach and return to the list. Run `/background` (or `/bg`) from any interactive session to send it to the background instead of quitting it, and `/fork` to split off a copy of the current conversation as a new row while the original keeps running. It's in research preview, and background sessions burn through your subscription usage the same as an interactive one: ten running in parallel costs roughly ten times what one does.
+`claude agents` opens one screen listing every background session you have running: what needs your input, what's still working, and what's finished. Sessions group under those three headers, so you can scan a dozen tasks at once instead of opening each transcript to check on it.
+
+Type into the dispatch input at the bottom to start a new background session right from the list, or press Enter on a row to attach and drop into the full interactive session, complete with a short recap of what happened while you were away. Press the left arrow or run `/exit` to detach and return to the list.
+
+Run `/background` (or `/bg`) from any interactive session to send it to the background instead of quitting it, and `/fork` to split off a copy of the current conversation as a new row while the original keeps running. It's in research preview, and background sessions burn through your subscription usage the same as an interactive one: ten running in parallel costs roughly ten times what one does.
 
 ![](images/agent_view.png)
 
@@ -263,7 +267,9 @@ Reference: [Headless mode](https://code.claude.com/docs/en/headless)
 
 ### Tip 7: Bootstrap CLAUDE.md with /init instead of starting from a blank file
 
-`/init` is an interactive slash command you run inside a session, not a terminal command. It scans your repo, build files, and configs, then drafts a starter CLAUDE.md with the build and test commands, directory layout, and conventions it can infer on its own. Run it again later and it proposes edits to your existing CLAUDE.md instead of overwriting it. Treat the output as a first draft, not a finished file: it can't guess deployment steps, business rules, or team conventions that live only in people's heads, so add those yourself before committing it. Once it's in, keep improving it the way the Workflow tips below describe, catching a mistake and writing the fix back into the file so the whole team benefits from it.
+`/init` is an interactive slash command you run inside a session, not a terminal command. It scans your repo, build files, and configs, then drafts a starter CLAUDE.md with the build and test commands, directory layout, and conventions it can infer on its own. Run it again later and it proposes edits to your existing CLAUDE.md instead of overwriting it.
+
+Treat the output as a first draft, not a finished file: it can't guess deployment steps, business rules, or team conventions that live only in people's heads, so add those yourself before committing it. Once it's in, keep improving it the way the Workflow tips below describe, catching a mistake and writing the fix back into the file so the whole team benefits from it.
 
 Example:
 ```
@@ -337,7 +343,11 @@ Reference: [Power user tips](https://support.claude.com/en/articles/14554000-cla
 
 ### Tip 5: Reach for agent teams when work needs teammates, not just workers
 
-A subagent hands back one result and disappears. An agent team keeps every teammate alive as its own full Claude Code session, one that can message any other teammate directly and pull work off a task list the whole team shares. One session takes the lead, spawning teammates and handing out tasks, but you can talk to any teammate directly and redirect it yourself without going through the lead. That gives you real coordination a subagent can't: teammates compare notes, challenge each other's findings, or split ownership across a feature's frontend, backend, and tests. Reach for it when you're debugging with competing hypotheses, running a review that needs several angles at once, or splitting a feature cleanly enough to give each teammate their own slice. It's still experimental, gated behind `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, and burns tokens fast since every teammate holds its own full context window, so start with 3-5 teammates and save it for work where the parallelism actually pays off. For anything sequential or single-file, delegating to a plain subagent (Tip 2) stays cheaper and simpler.
+A subagent hands back one result and disappears. An agent team keeps every teammate alive as its own full Claude Code session, one that can message any other teammate directly and pull work off a task list the whole team shares. One session takes the lead, spawning teammates and handing out tasks, but you can talk to any teammate directly and redirect it yourself without going through the lead.
+
+That gives you real coordination a subagent can't: teammates compare notes, challenge each other's findings, or split ownership across a feature's frontend, backend, and tests. Reach for it when you're debugging with competing hypotheses, running a review that needs several angles at once, or splitting a feature cleanly enough to give each teammate their own slice.
+
+It's still experimental, gated behind `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, and burns tokens fast since every teammate holds its own full context window, so start with 3-5 teammates and save it for work where the parallelism actually pays off. For anything sequential or single-file, delegating to a plain subagent (Tip 2) stays cheaper and simpler.
 
 Example: `.claude/settings.json`
 ```json
@@ -391,7 +401,9 @@ Reference: [Skills](https://code.claude.com/docs/en/skills)
 
 ### Tip 3: Let a plugin enforce TDD and root-cause debugging discipline
 
-Left alone, Claude tends to jump straight to code. The [Superpowers](https://claude.com/plugins/superpowers) plugin is a skill pack that pushes back on that: it forces red-green-refactor TDD, so a test has to fail before any implementation gets written, and it runs a four-phase debugging process that investigates the root cause instead of guessing at a fix. It also ships a brainstorming skill that questions your requirements before any code gets touched, and a review skill that hands the diff to a separate subagent instead of grading its own homework. These skills activate on their own once installed, so you don't have to invoke them by name, and every session inherits the same discipline instead of you re-explaining "write the test first" in every prompt.
+Left alone, Claude tends to jump straight to code. The [Superpowers](https://claude.com/plugins/superpowers) plugin is a skill pack that pushes back on that: it forces red-green-refactor TDD, so a test has to fail before any implementation gets written, and it runs a four-phase debugging process that investigates the root cause instead of guessing at a fix.
+
+It also ships a brainstorming skill that questions your requirements before any code gets touched, and a review skill that hands the diff to a separate subagent instead of grading its own homework. These skills activate on their own once installed, so you don't have to invoke them by name, and every session inherits the same discipline instead of you re-explaining "write the test first" in every prompt.
 
 Example:
 ```
@@ -405,7 +417,9 @@ Reference: [Discover and install plugins](https://code.claude.com/docs/en/discov
 
 ### Tip 4: Give Claude a real browser for pages WebFetch can't handle
 
-WebFetch reads static HTML, so it misses anything a page only renders after JavaScript runs, and it can't click a button, fill in a form, or step through a login. [agent-browser](https://github.com/vercel-labs/agent-browser) installs as a skill (`npx skills add vercel-labs/agent-browser`) and drives a real Chrome instance instead. Claude reads the page's accessibility tree and gets back stable references like `@e2` for each interactive element, then clicks, types, or screenshots against that reference instead of guessing a CSS selector that breaks the moment the layout shifts. Reach for this when you're testing your own app end to end, reading a page that only renders after JavaScript runs, or walking through a flow that needs a login. Keep WebFetch for the simple case: pulling text off a page that doesn't need any interaction.
+WebFetch reads static HTML, so it misses anything a page only renders after JavaScript runs, and it can't click a button, fill in a form, or step through a login. [agent-browser](https://github.com/vercel-labs/agent-browser) installs as a skill (`npx skills add vercel-labs/agent-browser`) and drives a real Chrome instance instead.
+
+Claude reads the page's accessibility tree and gets back stable references like `@e2` for each interactive element, then clicks, types, or screenshots against that reference instead of guessing a CSS selector that breaks the moment the layout shifts. Reach for this when you're testing your own app end to end, reading a page that only renders after JavaScript runs, or walking through a flow that needs a login. Keep WebFetch for the simple case: pulling text off a page that doesn't need any interaction.
 
 Example:
 ```
@@ -455,7 +469,9 @@ Reference: [Scale to many tools with tool search](https://code.claude.com/docs/e
 
 ### Tip 3: Keep raw tool output out of your context with a sandboxed MCP server
 
-Every byte a tool call returns lands in your context window, whether you needed all of it or not. [context-mode](https://github.com/mksglu/context-mode) is an MCP server that works around this: it runs commands and file reads in a subprocess, indexes the full output with SQLite, and hands back only what you explicitly print. A repo-wide grep or a log scan that would normally dump thousands of lines into the conversation instead returns a short, derived answer, and the rest stays searchable if you need it later. It also snapshots the conversation right before a compaction and reindexes it, so a compacted session can pull back a specific decision or file instead of losing it for good. This is worth reaching for whenever the output size is unpredictable and you plan to filter it down anyway, not for a command whose short output you'd read in full regardless.
+Every byte a tool call returns lands in your context window, whether you needed all of it or not. [context-mode](https://github.com/mksglu/context-mode) is an MCP server that works around this: it runs commands and file reads in a subprocess, indexes the full output with SQLite, and hands back only what you explicitly print. A repo-wide grep or a log scan that would normally dump thousands of lines into the conversation instead returns a short, derived answer, and the rest stays searchable if you need it later.
+
+It also snapshots the conversation right before a compaction and reindexes it, so a compacted session can pull back a specific decision or file instead of losing it for good. This is worth reaching for whenever the output size is unpredictable and you plan to filter it down anyway, not for a command whose short output you'd read in full regardless.
 
 Example:
 ```
@@ -467,7 +483,11 @@ Reference: [context-mode](https://github.com/mksglu/context-mode)
 
 ### Tip 4: Give Claude persistent memory across sessions with claude-mem
 
-Session resume with `--continue` or `--resume` replays a transcript, and CLAUDE.md only holds what you type into it yourself. Neither one remembers what Claude actually found out while working. [claude-mem](https://github.com/thedotmack/claude-mem) fills that gap: a plugin that hooks into five points in Claude's lifecycle and captures decisions, bug fixes, and other observations into a local SQLite and vector store as you go. A `SessionStart` hook then feeds the relevant slice of that history back in automatically at the start of your next session, no manual note-taking required. Install it from the plugin marketplace and restart Claude Code and it starts capturing immediately, no slash command needed to turn it on. Once enough history has built up, the bundled `mem-search` skill lets you ask about your own project's past in plain language. Wrap anything sensitive in `<private>` tags to keep it out of storage. Everything runs locally by default, and signing in only adds an optional hosted memory tier on top.
+Session resume with `--continue` or `--resume` replays a transcript, and CLAUDE.md only holds what you type into it yourself. Neither one remembers what Claude actually found out while working. [claude-mem](https://github.com/thedotmack/claude-mem) fills that gap: a plugin that hooks into five points in Claude's lifecycle and captures decisions, bug fixes, and other observations into a local SQLite and vector store as you go.
+
+A `SessionStart` hook then feeds the relevant slice of that history back in automatically at the start of your next session, no manual note-taking required. Install it from the plugin marketplace and restart Claude Code and it starts capturing immediately, no slash command needed to turn it on.
+
+Once enough history has built up, the bundled `mem-search` skill lets you ask about your own project's past in plain language. Wrap anything sensitive in `<private>` tags to keep it out of storage. Everything runs locally by default, and signing in only adds an optional hosted memory tier on top.
 
 Example:
 ```
@@ -534,7 +554,9 @@ Reference: [Settings reference](https://code.claude.com/docs/en/settings-referen
 
 ### Tip 5: Keep exploration out of the plan you're about to approve
 
-Plan mode collapses two different jobs into one prompt if you're not careful: understanding the code and deciding what to change. Ask Claude to read and explain first, with no plan attached, then ask for the plan as a separate follow-up once you've both seen what's actually there. This catches wrong assumptions before they get baked into a plan you approve at a glance, and gives you a natural point to redirect if the exploration turns up something you didn't expect. Not every task needs this split. If you could describe the diff in one sentence, like renaming a variable or adding a log line, skip plan mode and let Claude just do it. Reach for the split when you're unfamiliar with the code, the change touches multiple files, or you're genuinely unsure of the approach.
+Plan mode collapses two different jobs into one prompt if you're not careful: understanding the code and deciding what to change. Ask Claude to read and explain first, with no plan attached, then ask for the plan as a separate follow-up once you've both seen what's actually there. This catches wrong assumptions before they get baked into a plan you approve at a glance, and gives you a natural point to redirect if the exploration turns up something you didn't expect.
+
+Not every task needs this split. If you could describe the diff in one sentence, like renaming a variable or adding a log line, skip plan mode and let Claude just do it. Reach for the split when you're unfamiliar with the code, the change touches multiple files, or you're genuinely unsure of the approach.
 
 Example:
 ```
