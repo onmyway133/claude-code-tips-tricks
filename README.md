@@ -18,6 +18,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 9: Organize multiple projects with a terminal multiplexer app](#tip-9-organize-multiple-projects-with-a-terminal-multiplexer-app)
 - [Tip 10: View all background sessions with agent view](#tip-10-view-all-background-sessions-with-agent-view)
 - [Tip 11: Install a language server plugin for real code navigation](#tip-11-install-a-language-server-plugin-for-real-code-navigation)
+- [Tip 12: Check your context usage with /context](#tip-12-check-your-context-usage-with-context)
 
 ### Command
 - [Tip 1: Give Claude a standing goal for the whole session](#tip-1-give-claude-a-standing-goal-for-the-whole-session)
@@ -220,6 +221,21 @@ Find every caller of formatCurrency and update the call sites to pass the new lo
 ```
 
 Reference: [Tools reference: LSP tool behavior](https://code.claude.com/docs/en/tools#lsp-tool-behavior)
+
+### Tip 12: Check your context usage with /context
+
+Run `/context` to see exactly what's filling your context window. It breaks down token usage by category: system prompt, tools, MCP servers, memory files, loaded CLAUDE.md files, and conversation history, plus how much of the window is left. This is the fastest way to catch a bloated CLAUDE.md or a memory file eating tokens before auto-compaction kicks in and summarizes your session. It also lists which CLAUDE.md and memory files are actively loaded, so you can tell what's shaping Claude's behavior right now instead of guessing.
+
+Reach for it when a session feels sluggish, when you're not sure why context filled up faster than expected, or before starting a long task where you want some headroom left.
+
+![](images/context.png)
+
+Example:
+```
+/context
+```
+
+Reference: [Context window](https://code.claude.com/docs/en/context-window)
 
 ## Command
 
