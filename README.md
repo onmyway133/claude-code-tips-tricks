@@ -17,6 +17,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 8: Track your token spend with ccusage](#tip-8-track-your-token-spend-with-ccusage)
 - [Tip 9: Organize multiple projects with a terminal multiplexer app](#tip-9-organize-multiple-projects-with-a-terminal-multiplexer-app)
 - [Tip 10: View all background sessions with agent view](#tip-10-view-all-background-sessions-with-agent-view)
+- [Tip 11: Install a language server plugin for real code navigation](#tip-11-install-a-language-server-plugin-for-real-code-navigation)
 
 ### Command
 - [Tip 1: Give Claude a standing goal for the whole session](#tip-1-give-claude-a-standing-goal-for-the-whole-session)
@@ -49,6 +50,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 3: Keep raw tool output out of your context with a sandboxed MCP server](#tip-3-keep-raw-tool-output-out-of-your-context-with-a-sandboxed-mcp-server)
 - [Tip 4: Give Claude persistent memory across sessions with claude-mem](#tip-4-give-claude-persistent-memory-across-sessions-with-claude-mem)
 - [Tip 5: Bridge Claude Code and Codex with a plugin](#tip-5-bridge-claude-code-and-codex-with-a-plugin)
+- [Tip 6: Browse docs with Context7](#tip-6-browse-docs-with-context7)
 
 ### Prompt
 - [Tip 1: Have Claude interview you before building something big](#tip-1-have-claude-interview-you-before-building-something-big)
@@ -201,6 +203,23 @@ run the test suite and fix any failures
 ```
 
 Reference: [Manage multiple agents with agent view](https://code.claude.com/docs/en/agent-view)
+
+### Tip 11: Install a language server plugin for real code navigation
+
+Claude Code has a built-in `LSP` tool, but it stays inactive until you install a language server for your codebase. With one installed, Claude can jump to a symbol's definition, find every reference to it, read type information at a position, list the symbols in a file or across the whole workspace, find implementations of an interface, and trace call hierarchies. That's a step up from grep, which only matches text and can't tell a real reference from a coincidental match. The LSP tool also works quietly in the background: after every edit, it reports type errors and warnings right away, so Claude can fix them before running a full build. Anthropic maintains ready-made plugins for common languages, including `typescript-lsp`, `pyright-lsp`, `gopls-lsp`, `rust-analyzer-lsp`, `csharp-lsp`, `jdtls-lsp`, `kotlin-lsp`, `clangd-lsp`, `ruby-lsp`, `php-lsp`, `swift-lsp`, and `lua-lsp`. Install the one matching your stack with `/plugin`, and Claude picks it up automatically, no extra config needed.
+
+![](images/lsp.png)
+
+Example:
+```
+/plugin
+```
+Search "lsp" under Discover, install `typescript-lsp` (or whichever matches your stack), then ask:
+```
+Find every caller of formatCurrency and update the call sites to pass the new locale argument.
+```
+
+Reference: [Tools reference: LSP tool behavior](https://code.claude.com/docs/en/tools#lsp-tool-behavior)
 
 ## Command
 
@@ -551,6 +570,22 @@ Example:
 ```
 
 Reference: [codex-plugin-cc](https://github.com/openai/codex-plugin-cc)
+
+### Tip 6: Browse docs with Context7
+
+LLM training data goes stale, so Claude will often suggest APIs from a library's older major version, or invent methods that don't exist at all. [Context7](https://github.com/upstash/context7) fixes this by fetching current, version-specific docs and code examples straight from the source and dropping them into your prompt, instead of relying on what Claude memorized during training. Add it as an MCP server, then append "use context7" to a prompt whenever you're working against a library that ships fast or just had a breaking change. Under the hood it exposes two tools: `resolve-library-id` turns a name like "Next.js" into an exact Context7 library ID, and `query-docs` fetches the relevant docs for that ID and your question. A free API key from the Context7 dashboard raises your rate limit; the server also works anonymously with a lower cap.
+
+Example:
+```
+claude mcp add --transport http context7 https://mcp.context7.com/mcp
+```
+Then in a prompt:
+```
+Create a Next.js middleware that checks a JWT cookie and redirects
+unauthenticated users to /login. use context7
+```
+
+Reference: [Context7](https://github.com/upstash/context7)
 
 ## Prompt
 
