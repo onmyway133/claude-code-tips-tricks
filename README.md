@@ -45,6 +45,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 4: Give Claude a real browser for pages WebFetch can't handle](#tip-4-give-claude-a-real-browser-for-pages-webfetch-cant-handle)
 - [Tip 5: Browse skills.sh before writing one from scratch](#tip-5-browse-skillssh-before-writing-one-from-scratch)
 - [Tip 6: Use skill-creator to create new skill](#tip-6-use-skill-creator-to-create-new-skill)
+- [Tip 7: Install a skill to curb overengineering and unrequested changes](#tip-7-install-a-skill-to-curb-overengineering-and-unrequested-changes)
 
 ### Mcp
 - [Tip 1: Bundle MCP servers, skills, and hooks together as a plugin](#tip-1-bundle-mcp-servers-skills-and-hooks-together-as-a-plugin)
@@ -532,6 +533,22 @@ I want a skill that reviews Terraform plans for cost regressions before merge. H
 ```
 
 Reference: [skill-creator](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/skill-creator)
+
+### Tip 7: Install a skill to curb overengineering and unrequested changes
+
+Left alone, Claude tends to make silent assumptions, add unrequested abstractions, and touch code beyond what was asked. [andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) is a single CLAUDE.md file distilled from Andrej Karpathy's public notes on common LLM coding mistakes, and it pushes back on exactly those habits. It tells Claude to state its assumptions and ask when unsure instead of guessing, keep changes to the minimum the task needs, leave adjacent code alone, and turn each task into a success criterion it can verify before calling the work done.
+
+Install it as a plugin with `/plugin install andrej-karpathy-skills@karpathy-skills`, or copy the file straight into your project's `.claude/` folder if you'd rather review it first. Once it's in place it applies to every session automatically, the same way any CLAUDE.md does, so there's no name to invoke.
+
+Example:
+```
+/plugin install andrej-karpathy-skills@karpathy-skills
+```
+```
+Add rate limiting to the public API.
+```
+
+Reference: [andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills)
 
 ## Mcp
 
