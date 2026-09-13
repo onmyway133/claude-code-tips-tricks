@@ -49,6 +49,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 2: Write the code in one session, review it in another](#tip-2-write-the-code-in-one-session-review-it-in-another)
 - [Tip 3: Put your planning effort into plan mode, not into micromanaging](#tip-3-put-your-planning-effort-into-plan-mode-not-into-micromanaging)
 - [Tip 4: Move plans out of the 30-day cache and into your repo](#tip-4-move-plans-out-of-the-30-day-cache-and-into-your-repo)
+- [Tip 5: Keep exploration out of the plan you're about to approve](#tip-5-keep-exploration-out-of-the-plan-youre-about-to-approve)
 
 ### Hooks
 - [Tip 1: Hook into specific moments in Claude's lifecycle](#tip-1-hook-into-specific-moments-in-claudes-lifecycle)
@@ -488,6 +489,24 @@ Example:
 ```
 
 Reference: [Settings reference](https://code.claude.com/docs/en/settings-reference)
+
+### Tip 5: Keep exploration out of the plan you're about to approve
+
+Plan mode collapses two different jobs into one prompt if you're not careful: understanding the code and deciding what to change. Ask Claude to read and explain first, with no plan attached, then ask for the plan as a separate follow-up once you've both seen what's actually there. This catches wrong assumptions before they get baked into a plan you approve at a glance, and gives you a natural point to redirect if the exploration turns up something you didn't expect. Not every task needs this split. If you could describe the diff in one sentence, like renaming a variable or adding a log line, skip plan mode and let Claude just do it. Reach for the split when you're unfamiliar with the code, the change touches multiple files, or you're genuinely unsure of the approach.
+
+Example:
+```
+claude --permission-mode plan
+```
+```
+Read src/auth and figure out how we handle sessions and login. Also check how we manage environment variables for secrets. Don't propose a plan yet, just tell me what you find.
+```
+Once you've confirmed the findings:
+```
+Now write a plan for adding Google OAuth: what files change, what the session flow looks like.
+```
+
+Reference: [Best practices](https://code.claude.com/docs/en/best-practices#explore-first-then-plan-then-code)
 
 ## Hooks
 
