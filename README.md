@@ -76,6 +76,9 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 4: Give Claude a way to check its own work](#tip-4-give-claude-a-way-to-check-its-own-work)
 - [Tip 5: Run risky, unsupervised work in a container](#tip-5-run-risky-unsupervised-work-in-a-container)
 
+### Context
+- [Tip 1: Manage context deliberately instead of just filling it up](#tip-1-manage-context-deliberately-instead-of-just-filling-it-up)
+
 ## General
 
 ### Tip 1: Name and resume sessions like git branches
@@ -817,3 +820,24 @@ Reference: [Best practices](https://code.claude.com/docs/en/best-practices)
 A session running with `--dangerously-skip-permissions` shouldn't run on your host machine, because if something goes wrong there's nothing containing the damage. Move that session into a container instead, and a bad outcome stays inside the container. This is the right setup for long research tasks, or for something like patching a minified CLI bundle after an upgrade: Claude can explore, apply a patch, notice it didn't work, and iterate, all without you approving each step, because the blast radius is contained by the environment rather than by your attention.
 
 Reference: [Permission modes](https://code.claude.com/docs/en/permission-modes)
+
+## Context
+
+### Tip 1: Manage context deliberately instead of just filling it up
+
+Every message you send gets the full conversation pasted back into the model from scratch. There's no memory between turns, only a transcript that grows and gets replayed in full each time. Whatever isn't in that transcript doesn't exist to the model, and whatever is in it competes for a fixed amount of attention.
+
+That second part is why longer sessions quietly get worse. Attention is finite, so adding more tokens shrinks the share any single token gets. Anthropic calls the resulting quality drop "context rot", and it starts from the first token you add, not past some threshold. It's also why a rule sitting untouched in your CLAUDE.md can still get ignored forty turns in: the instruction never left the window, it just stopped getting enough attention to act on. And it's why a wrong assumption or a bad file read from ten messages back can quietly shape the next fifty, since the model has no way to un-see something once it's in context.
+
+Piling on more rules doesn't fix this, since every added rule competes for the same limited attention. What helps is managing what actually stays in the window: send exploration to a subagent so its dead ends never enter your context, use `/rewind` to drop a failed attempt from the conversation without losing the code already on disk, run `/compact` yourself at a clean breakpoint instead of waiting for it to trigger mid-task, and `/clear` once a piece of work is genuinely done instead of dragging it into the next one. See [context engineering](tips/context-engineering.md) for how these compare and when to reach for each.
+
+Prompt examples:
+```
+Spawn a subagent to find every place we call the legacy payment API. Report back only the call sites and their signatures, not the files you read to find them.
+```
+```
+/rewind
+```
+Then pick "Restore conversation only" to drop the last few turns of a failed debugging attempt while keeping the code changes on disk, and tell Claude what you changed by hand.
+
+Reference: [Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents), [Checkpointing](https://code.claude.com/docs/en/checkpointing)
