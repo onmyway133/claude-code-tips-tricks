@@ -46,6 +46,7 @@ Collection of my favorite Claude Code tips as I explore it.
 - [Tip 5: Browse skills.sh before writing one from scratch](#tip-5-browse-skillssh-before-writing-one-from-scratch)
 - [Tip 6: Use skill-creator to create new skill](#tip-6-use-skill-creator-to-create-new-skill)
 - [Tip 7: Install a skill to curb overengineering and unrequested changes](#tip-7-install-a-skill-to-curb-overengineering-and-unrequested-changes)
+- [Tip 8: Turn a manual double-check into a self-verifying skill](#tip-8-turn-a-manual-double-check-into-a-self-verifying-skill)
 
 ### Mcp
 - [Tip 1: Bundle MCP servers, skills, and hooks together as a plugin](#tip-1-bundle-mcp-servers-skills-and-hooks-together-as-a-plugin)
@@ -552,6 +553,29 @@ Add rate limiting to the public API.
 ```
 
 Reference: [andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills)
+
+### Tip 8: Turn a manual double-check into a self-verifying skill
+
+Notice the checks you do by hand after Claude finishes: grepping logs for a request ID, confirming a payload didn't leak into an error log, re-reading a diff for a pattern you always catch. Each one you keep doing yourself is a verification step Claude can't infer on its own, so write it down as a skill instead of repeating the correction every time. A verification skill is a plain-English description of the check plus the fix, the same way you'd hand it to a new teammate: what to look for, and what to do when it's wrong.
+
+How it gets triggered depends on the check. A standalone skill you invoke by name suits a cross-cutting audit like security or accessibility that doesn't need to run on every change. Embedding the check straight into a producing skill's instructions, like appending "run eslint on it and fix any errors" to a component-scaffolding skill, makes it run automatically every time that skill fires. Chaining several verification skills in sequence, for example `/code-review` then `/simplify` then `/verify`, turns a personal habit into a repeatable pipeline, and wiring that same chain into a GitHub Action makes it shared infrastructure instead of something only you remember to run.
+
+Before writing one, check what's built in: the `/verify` skill, listing exact build and test commands in CLAUDE.md so Claude catches toolchain errors instead of guessing, and Claude Code's own code review integration.
+
+Example: `.claude/skills/log-hygiene/SKILL.md`
+```
+---
+name: log-hygiene
+description: Check new error logs for a request ID and no leaked payload data
+---
+For any error log statement you add or touch:
+1. Confirm it includes the current request ID
+2. Confirm it does not log the raw request/response payload
+3. If either check fails, fix it: add the request ID where it's missing,
+   and strip the payload from the log call
+```
+
+Reference: [Building verification loops in Claude Code with skills](https://claude.com/blog/building-verification-loops-in-claude-code-with-skills)
 
 ## Mcp
 
